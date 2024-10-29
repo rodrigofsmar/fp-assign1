@@ -37,6 +37,25 @@ def verifyPropertyInPath(path, pathProp, typeOfSat):
         characteristics = characteristics.split('/') #creates list of characteristics
         propertyList.append((index, characteristics)) #appends tuple to propertyList
 
+    def checkPlaceSatisfaction(place, required_chars):
+        if typeOfSat == 'G':  # General satisfaction
+            return all(char in place for char in required_chars)
+        elif typeOfSat == 'W':  # Weak satisfaction
+            return any(char in place for char in required_chars)
+        
+    currentPosition = 0
+    for index, characteristics in propertyList:
+        #circular path
+        nextPosition = (currentPosition + index) % len(pathPlaces)
+
+        if not checkPlaceSatisfaction(pathPlaces[nextPosition], characteristics):
+            return False #in case the property is not satisfied
+        
+        currentPosition = nextPosition #update current position
+
+    return True #in case all properties were satisfied
+
+
     #print(pathPlaces)
     #print(propertyList)
 
